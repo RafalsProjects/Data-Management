@@ -201,5 +201,95 @@ alter table Pracownicy
 drop constraint UQ_Email;
 
 
+-- Tworzenie tabeli 'Pracownicy'
+create table Pracownicy
+(
+    Imie nvarchar(50),
+    -- Kolumna dla imienia pracownika
+    Nazwisko nvarchar(50),
+    -- Kolumna dla nazwiska pracownika
+    Wiek int,
+    -- Kolumna dla wieku pracownika
+    Plec nvarchar(10),
+    -- Kolumna dla płci pracownika
+    Stanowisko nvarchar(50),
+    -- Kolumna dla stanowiska pracownika
+    Stawka_za_godzine decimal(10, 2)
+    -- Kolumna dla stawki godzinowej
+);
 
+-- Wstawianie danych do tabeli 'Pracownicy'
+insert into Pracownicy
+    (Imie, Nazwisko, Wiek, Plec, Stanowisko, Stawka_za_godzine)
+values
+    ('Antoni', 'Anonim', 26, 'Męska', 'Stolarz', 10.00),
+    ('Natalia', 'Niewiadoma', 31, 'Żeńska', 'Sekretarka', 20.00),
+    ('Alina', 'Enigma', 41, 'Żeńska', 'Sekretarka', 20.00);
+
+
+-- Sprawdzenie danych w tabeli
+select *
+from Pracownicy;
+
+-- Aktualizacja dla wszystkich pracowników / ustawienie wartości 
+update Pracownicy
+set wiek = wiek + 1
+
+select *
+from Pracownicy;
+
+update Pracownicy
+set wiek = wiek - 9
+
+select *
+from Pracownicy;
+
+
+-- Zwięszkenie stawki
+update Pracownicy
+set stawka_za_godzine = stawka_za_godzine * 2
+
+update Pracownicy
+set stawka_za_godzine
+= stawka_za_godzine * 2
+where Stawka_za_godzine = 40
+
+update Pracownicy
+set stawka_za_godzine
+= stawka_za_godzine * 4
+where Stanowisko = 'Stolarz'
+
+-- Transakcja
+/* 
+Transackja umożliwia przetestowania 
+niektórych operacji, które są odwracalne
+
+begin tran -- rozpoczęcie transakcji
+
+rollback -- przywraca nam bazę do stanu sprzed rozpoczęcia transackji
+
+commit -- zatwierdza nam zmiany w środki transakcji
+
+Po użyciu commit nie możemy przywrócić bazy dancyh do poprzedniego stanu
+
+*/
+select *
+from Pracownicy
+
+begin tran
+
+update Pracownicy
+set Stawka_za_godzine=Stawka_za_godzine*2
+
+select *
+from Pracownicy
+
+rollback
+-- przywraca nam bazę do stanu sprzed rozpoczęcia transackji
+
+commit
+-- zatwierdza nam zmiany w środki transakcji
+
+select *
+from Pracownicy
 
