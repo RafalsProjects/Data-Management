@@ -19,7 +19,7 @@ where City = 'London' and HireDate between '1993-01-01' and '1993-12-31'
 select * from dbo.employees
 where City = 'London' and year(HireDate) = 1993
 
-year() -- to funkcja year()
+-- year() -- to funkcja year()
 
 -- Chcemy poszukać osób, które nie podlegają nikomu. Czyli np. wartość NULL (to zależy od tabeli)
 select * from dbo.employees 

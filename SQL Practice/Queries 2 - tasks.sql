@@ -2,7 +2,7 @@
 --WHERE OrderDate = '1997-05-19'
 
 -- 15. Ktory klient - nazwa - ile lacznie zaplacil
-select sum(UnitPrice*Quantity) as aggregated_value, 
+select sum(UnitPrice*Quantity * (1 - Discount)) as aggregated_value, 
 CompanyName 
 from [Order Details] 
 left join Orders on [Order Details].OrderID = [Orders].OrderID
