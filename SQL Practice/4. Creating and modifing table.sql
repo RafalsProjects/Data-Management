@@ -66,6 +66,7 @@ drop table pracownik
 -- jest wolniejszy usuwa jeden wiersz po drugim,
 -- można używać where
 -- Można przywracać dane przy pomocy rollback (przed rollback potrzeba innej komendy)
+-- gdy mamy klucz główny i ostatnia wartość to x po usunięciu rekordów następna dodana wartość będzie miala klucz główny x+1
 
 -- TRUNCATE
 -- truncate nie wykonuje wyzwalaczy nie zostawia logów
@@ -73,6 +74,7 @@ drop table pracownik
 -- zachowuje strukture tabeli
 -- nie można używać warunków ehere 
 -- nie ma możliwości przywrócenia
+-- po usunięciu danych klucz główny sie resetuje i iteruje od wartości początkowej czyli 1
 
 -- DROP
 -- usuwa całkowicie tabele z jej strukturą
