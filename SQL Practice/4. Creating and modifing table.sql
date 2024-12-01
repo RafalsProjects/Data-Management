@@ -293,3 +293,13 @@ commit
 select *
 from Pracownicy
 
+-- constrains 
+/* 
+to warunku, ograniczenia w wprowadzaniu danych
+- primary keys
+- unique
+- ilość znaków
+- check
+- typ danych 
+- itp.
+*/
