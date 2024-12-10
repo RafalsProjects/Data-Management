@@ -175,9 +175,7 @@ select top 10 * from Dishes;
 select top 10 * from Employees;
 select top 10 * from Ingredients;
 select top 10 * from Inventory;
-select top 10 * from Orders;
-select top 10 * from OrderDetails;
+select * from Orders;
+select * from OrderDetails;
 select top 10 * from Suppliers;
 
-select * from OrderDetails;
-select * from Orders;
