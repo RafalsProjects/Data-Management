@@ -214,7 +214,7 @@ select *
 from most_ordered_category
 order by sum_of_quantity DESC; -- asc
 
--- Create 3 triggers (wyzwalacze)
+-- Create 3 triggers (wyzwalacze, automatyzacje)
 -- 1. Trigger
 CREATE TRIGGER trg_AfterOrder
 ON Orders
@@ -252,4 +252,76 @@ BEGIN
     PRINT 'Price of dishes was updated';
 END;
 
--- Create 3 stored procedures
+-- Create 3 stored procedures (Składowa procedura, automatyzacje)
+/*
+Procedury składowane są używane w SQL do wykonywania złożonych operacji, takich jak:
+
+Dodawanie, usuwanie i aktualizacja danych.
+Przetwarzanie logiki biznesowej.
+Optymalizacja wielokrotnego wykonywania tych samych operacji.
+Procedury są przechowywane na serwerze, co pozwala na:
+
+Lepszą wydajność (dzięki kompilacji).
+Bezpieczeństwo i spójność kodu.
+*/
+
+-- Stored procedures 1
+CREATE PROCEDURE AddSuppliers
+    @SupplierName NVARCHAR(30), -- NVARCHAR umożliwia znaki Unicode czyli wszystkie np. ł, ó, ą itd.
+    @ContactEmail NVARCHAR(30),
+    @ContactPhone NUMERIC(9,0)
+AS
+BEGIN
+    INSERT INTO Suppliers (SupplierName, ContactEmail, ContactPhone)
+    VALUES (@SupplierName, @ContactEmail, @ContactPhone);
+END;
+
+EXEC AddSuppliers 
+    @SupplierName = 'Tech Corp', 
+    @ContactEmail = 'info@techcorp.com', 
+    @ContactPhone = 123456789; -- Numer telefonu jako liczba
+
+EXEC AddSuppliers 
+    @SupplierName = 'ABC Solutions', 
+    @ContactEmail = 'contact@abcsolutions.com', 
+    @ContactPhone = 987654321;
+
+-- Stored procedures 2
+CREATE PROCEDURE AddEmployees
+    @FirstName NVARCHAR(30), -- NVARCHAR umożliwia znaki Unicode czyli wszystkie np. ł, ó, ą itd.
+    @LastName NVARCHAR(30),
+    @Position NVARCHAR(40),
+    @HireDate DATE = NULL, -- Opcjonalna data, domyślnie NULL
+    @Salary FLOAT(10)
+AS
+BEGIN
+    SET @HireDate = ISNULL(@HireDate, GETDATE()); -- ustawianie dzisiejszej daty jeżeli @HireDate jest NULL, dzięki temu nie będzie trzeba podawać daty przy EXEC
+    INSERT INTO Employees (FirstName, LastName, Position, HireDate, Salary)
+    VALUES (@FirstName, @LastName, @Position, @HireDate, @Salary);
+END;
+
+EXEC AddEmployees
+    @FirstName = 'Jan', 
+    @LastName = 'Kowalski', 
+    @Position = 'Manager', 
+    @HireDate = '2024-12-14', 
+    @Salary = 5000.00;
+
+EXEC AddEmployees
+    @FirstName = 'Anna', 
+    @LastName = 'Nowak', 
+    @Position = 'Developer', 
+    @Salary = 6000.00;
+
+
+-- Stored procedure 3
+CREATE PROCEDURE DeleteSupplierByName
+    @SupplierName NVARCHAR(30) -- Nazwa dostawcy
+AS
+BEGIN
+    -- Usuwanie rekordu
+    DELETE FROM Suppliers
+    WHERE SupplierName = @SupplierName;
+END;
+
+EXEC DeleteSupplierByName @SupplierName = 'Tech Corp';
