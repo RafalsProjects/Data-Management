@@ -179,3 +179,77 @@ select * from Orders;
 select * from OrderDetails;
 select top 10 * from Suppliers;
 
+
+-- Create 3 view (widoki)
+-- 1. View
+create view customer_value AS
+select Orders.CustomerID, sum(OrderDetails.UnitPrice*OrderDetails.Quantity) as sum_of_spending
+from Orders
+left JOIN OrderDetails on Orders.OrderID = OrderDetails.OrderID
+Group by Orders.CustomerID;
+
+select *
+from customer_value
+order by sum_of_spending DESC; -- asc
+
+-- 2. View
+create view most_ordered_dish AS
+select Dishes.DishName, sum(OrderDetails.Quantity) as sum_of_quantity
+from Dishes
+left JOIN OrderDetails on Dishes.DishID = OrderDetails.DishID
+Group by Dishes.DishName;
+
+select *
+from most_ordered_dish
+order by sum_of_quantity DESC;
+
+-- 3. View 
+create view most_ordered_category AS
+select Dishes.Category, sum(OrderDetails.Quantity) as sum_of_quantity
+from Dishes
+left JOIN OrderDetails on Dishes.DishID = OrderDetails.DishID
+Group by Dishes.Category;
+-- dużo się nie zmieniło w tym zapytaniu, jednak w przypadku innej bazy danych podział na kategorie przy większej ilości danych miałby większy sens
+select *
+from most_ordered_category
+order by sum_of_quantity DESC; -- asc
+
+-- Create 3 triggers (wyzwalacze)
+-- 1. Trigger
+CREATE TRIGGER trg_AfterOrder
+ON Orders
+AFTER INSERT
+AS
+BEGIN
+    PRINT 'New order araise';
+END;
+
+-- 2. Trigger
+CREATE TRIGGER trg_DishUpdate
+ON Dishes
+AFTER UPDATE
+AS
+BEGIN
+    PRINT 'Dishes was updated';
+END;
+
+-- 3. Trigger
+CREATE TRIGGER trg_DishDiscontinued
+ON Dishes
+AFTER DELETE
+AS
+BEGIN
+    PRINT 'Dishes was discontinued';
+END;
+
+-- 4. Trigger
+CREATE TRIGGER trg_DishPriceUpdated
+ON Dishes
+AFTER UPDATE
+AS
+BEGIN
+    IF UPDATE(Price)
+    PRINT 'Price of dishes was updated';
+END;
+
+-- Create 3 stored procedures
