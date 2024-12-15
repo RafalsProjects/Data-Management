@@ -325,3 +325,34 @@ BEGIN
 END;
 
 EXEC DeleteSupplierByName @SupplierName = 'Tech Corp';
+
+-- Funkcja
+CREATE FUNCTION dbo.GetEmployeesPosition (@Position NVARCHAR(100))
+RETURNS TABLE
+AS
+RETURN (
+    SELECT FirstName, LastName, Position, Salary
+    FROM Employees
+    WHERE [Position] = @Position
+);
+-- Egzekucja funkcji
+SELECT * FROM dbo.GetEmployeesPosition('Manager');
+
+
+-- Zapytania
+-- Zapytanie 1
+select FirstName, LastName, PhoneNumber from Customers
+where  JoinDate >= '2024-12-10';
+-- Zapytanie 2
+select DishName, QuantityAvailable from Dishes
+where QuantityAvailable <= 5;
+-- Zapytanie 3
+select FirstName, LastName, Position, Salary, HireDate from Employees
+where  HireDate >= '2024-12-10' and Salary <= 3000;
+-- Zapytanie 4
+select sum(Salary) as Sum_Of_Spending_On_Stuff from Employees;
+-- Zapytanie 5
+select FirstName + ' ' + LastName AS FullName, count(Orders.OrderID) as Orders_Count from Employees
+left join Orders ON Employees.EmployeeID = Orders.EmployeeID
+LEFT JOIN OrderDetails on Orders.OrderID = OrderDetails.OrderID
+group by FirstName + ' ' + LastName;
