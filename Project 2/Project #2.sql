@@ -356,3 +356,13 @@ select FirstName + ' ' + LastName AS FullName, count(Orders.OrderID) as Orders_C
 left join Orders ON Employees.EmployeeID = Orders.EmployeeID
 LEFT JOIN OrderDetails on Orders.OrderID = OrderDetails.OrderID
 group by FirstName + ' ' + LastName;
+
+-- Helpful queries
+select top 10 * from Customers;
+select top 10 * from Dishes;
+select top 10 * from Employees;
+select top 10 * from Ingredients;
+select top 10 * from Inventory;
+select * from Orders;
+select * from OrderDetails;
+select top 10 * from Suppliers;
