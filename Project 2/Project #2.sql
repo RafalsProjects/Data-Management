@@ -371,7 +371,6 @@ GO
 -- Egzekucja funkcji
 SELECT * FROM dbo.GetEmployeesPosition('Manager');
 
-
 -- Zapytania
 -- Zapytanie 1
 select FirstName, LastName, PhoneNumber from Customers
