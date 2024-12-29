@@ -182,17 +182,18 @@ BEGIN
     );
     SET @OrderID = @OrderID + 1;
 END;
+GO
 
--- Poznanie bazy danych 
-select top 10 * from Customers;
-select top 10 * from Dishes;
-select top 10 * from Employees;
-select top 10 * from Ingredients;
-select top 10 * from Inventory;
-select * from Orders;
-select * from OrderDetails;
-select top 10 * from Suppliers;
-
+-- -- Poznanie bazy danych 
+-- select top 10 * from Customers;
+-- select top 10 * from Dishes;
+-- select top 10 * from Employees;
+-- select top 10 * from Ingredients;
+-- select top 10 * from Inventory;
+-- select * from Orders;
+-- select * from OrderDetails;
+-- select top 10 * from Suppliers;
+-- GO
 
 -- Create 3 view (widoki)
 -- 1. View
@@ -201,10 +202,12 @@ select Orders.CustomerID, sum(OrderDetails.UnitPrice*OrderDetails.Quantity) as s
 from Orders
 left JOIN OrderDetails on Orders.OrderID = OrderDetails.OrderID
 Group by Orders.CustomerID;
+GO
 
 select *
 from customer_value
 order by sum_of_spending DESC; -- asc
+GO
 
 -- 2. View
 create view most_ordered_dish AS
@@ -212,10 +215,12 @@ select Dishes.DishName, sum(OrderDetails.Quantity) as sum_of_quantity
 from Dishes
 left JOIN OrderDetails on Dishes.DishID = OrderDetails.DishID
 Group by Dishes.DishName;
+GO
 
 select *
 from most_ordered_dish
 order by sum_of_quantity DESC;
+GO
 
 -- 3. View 
 create view most_ordered_category AS
@@ -223,10 +228,12 @@ select Dishes.Category, sum(OrderDetails.Quantity) as sum_of_quantity
 from Dishes
 left JOIN OrderDetails on Dishes.DishID = OrderDetails.DishID
 Group by Dishes.Category;
+GO
 -- dużo się nie zmieniło w tym zapytaniu, jednak w przypadku innej bazy danych podział na kategorie przy większej ilości danych miałby większy sens
 select *
 from most_ordered_category
 order by sum_of_quantity DESC; -- asc
+go
 
 -- Create 3 triggers (wyzwalacze, automatyzacje)
 -- 1. Trigger
