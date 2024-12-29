@@ -1,8 +1,13 @@
+-- Usuwanie restaurantDB jeżeli istnieje
+USE master;
+DROP DATABASE IF exists RestaurantDB;
+
 -- Tworzenie nowej bazy danych
 CREATE DATABASE RestaurantDB;
-
+GO
 -- Użycie nowo utworzonej bazy danych
 USE RestaurantDB;
+GO
 
 -- Tworzenie tabeli przechowującej informacje o klientach
 CREATE TABLE Customers (
@@ -13,6 +18,7 @@ CREATE TABLE Customers (
     PhoneNumber VARCHAR(15) NOT NULL CHECK (PhoneNumber LIKE '[0-9]%'), -- Numer telefonu, sprawdzany pod kątem tylko cyfr
     JoinDate DATE NOT NULL DEFAULT CAST(GETDATE() AS DATE) -- Data dołączenia klienta, domyślnie dzisiejsza
 );
+GO
 
 -- Tworzenie tabeli przechowującej informacje o pracownikach
 CREATE TABLE Employees (
@@ -23,6 +29,8 @@ CREATE TABLE Employees (
     HireDate DATE NOT NULL DEFAULT CAST(GETDATE() AS DATE), -- Data zatrudnienia, domyślnie dzisiejsza
     Salary DECIMAL(10, 2) NOT NULL -- Wynagrodzenie z dokładnością do 2 miejsc po przecinku
 );
+GO
+
 
 CREATE TABLE Dishes (
     DishID INT PRIMARY KEY IDENTITY(1,1), -- Klucz główny, unikalny identyfikator dania
@@ -31,6 +39,7 @@ CREATE TABLE Dishes (
     Category VARCHAR(20) NOT NULL, -- Kategoria dania (np. pizza, deser), do 20 znaków
     QuantityAvailable INT NOT NULL DEFAULT 0 -- Liczba dostępnych sztuk (0 - brak dostępnych)
 );
+GO
 
 -- Tworzenie tabeli przechowującej zamówienia klientów
 CREATE TABLE Orders (
@@ -41,6 +50,7 @@ CREATE TABLE Orders (
     FOREIGN KEY (CustomerID) REFERENCES Customers(CustomerID), -- Relacja do tabeli Customers
     FOREIGN KEY (EmployeeID) REFERENCES Employees(EmployeeID) -- Relacja do tabeli Employees
 );
+GO
 
 -- Tworzenie tabeli przechowującej szczegóły zamówień
 CREATE TABLE OrderDetails (
@@ -52,6 +62,7 @@ CREATE TABLE OrderDetails (
     FOREIGN KEY (OrderID) REFERENCES Orders(OrderID), -- Relacja do tabeli Orders
     FOREIGN KEY (DishID) REFERENCES Dishes(DishID) -- Relacja do tabeli Dishes
 );
+GO
 
 -- Tworzenie tabeli przechowującej informacje o dostawcach
 CREATE TABLE Suppliers (
@@ -60,6 +71,7 @@ CREATE TABLE Suppliers (
     ContactEmail VARCHAR(255), -- Adres e-mail dostawcy, maks. 255 znaków
     ContactPhone VARCHAR(15) NOT NULL -- Numer telefonu dostawcy
 );
+GO
 
 -- Tworzenie tabeli przechowującej informacje o składnikach
 CREATE TABLE Ingredients (
@@ -68,6 +80,7 @@ CREATE TABLE Ingredients (
     SupplierID INT NOT NULL, -- Klucz obcy, wskazuje dostawcę składnika
     FOREIGN KEY (SupplierID) REFERENCES Suppliers(SupplierID) -- Relacja do tabeli Suppliers
 );
+GO
 
 -- Tworzenie tabeli przechowującej informacje o stanie magazynowym
 CREATE TABLE Inventory (
@@ -77,7 +90,7 @@ CREATE TABLE Inventory (
     LastUpdated DATE NOT NULL DEFAULT CAST(GETDATE() AS DATE), -- Data ostatniej aktualizacji stanu magazynowego
     FOREIGN KEY (IngredientID) REFERENCES Ingredients(IngredientID) -- Relacja do tabeli Ingredients
 );
-
+GO
 
 -- Dodawanie przykładowych danych do tabeli Customers
 INSERT INTO Customers (FirstName, LastName, Email, PhoneNumber)
@@ -87,6 +100,7 @@ VALUES
 ('Alice', 'Johnson', 'alice.j@example.com', '555987654'),
 ('Bob', 'Brown', 'bob.b@example.com', '555876543'),
 ('Charlie', 'Taylor', 'charlie.t@example.com', '555765432');
+GO
 
 -- Dodawanie przykładowych danych do tabeli Employees
 INSERT INTO Employees (FirstName, LastName, Position, Salary)
@@ -223,6 +237,7 @@ AS
 BEGIN
     PRINT 'New order araise';
 END;
+GO
 
 -- 2. Trigger
 CREATE TRIGGER trg_DishUpdate
@@ -232,6 +247,7 @@ AS
 BEGIN
     PRINT 'Dishes was updated';
 END;
+GO
 
 -- 3. Trigger
 CREATE TRIGGER trg_DishDiscontinued
@@ -241,6 +257,7 @@ AS
 BEGIN
     PRINT 'Dishes was discontinued';
 END;
+GO
 
 -- 4. Trigger
 CREATE TRIGGER trg_DishPriceUpdated
@@ -251,6 +268,7 @@ BEGIN
     IF UPDATE(Price)
     PRINT 'Price of dishes was updated';
 END;
+GO
 
 -- Create 3 stored procedures (Składowa procedura, automatyzacje)
 /*
@@ -275,6 +293,7 @@ BEGIN
     INSERT INTO Suppliers (SupplierName, ContactEmail, ContactPhone)
     VALUES (@SupplierName, @ContactEmail, @ContactPhone);
 END;
+GO
 
 EXEC AddSuppliers 
     @SupplierName = 'Tech Corp', 
@@ -285,6 +304,7 @@ EXEC AddSuppliers
     @SupplierName = 'ABC Solutions', 
     @ContactEmail = 'contact@abcsolutions.com', 
     @ContactPhone = 987654321;
+GO
 
 -- Stored procedures 2
 CREATE PROCEDURE AddEmployees
@@ -299,6 +319,7 @@ BEGIN
     INSERT INTO Employees (FirstName, LastName, Position, HireDate, Salary)
     VALUES (@FirstName, @LastName, @Position, @HireDate, @Salary);
 END;
+GO
 
 EXEC AddEmployees
     @FirstName = 'Jan', 
@@ -312,6 +333,7 @@ EXEC AddEmployees
     @LastName = 'Nowak', 
     @Position = 'Developer', 
     @Salary = 6000.00;
+GO
 
 
 -- Stored procedure 3
@@ -323,8 +345,10 @@ BEGIN
     DELETE FROM Suppliers
     WHERE SupplierName = @SupplierName;
 END;
+GO
 
 EXEC DeleteSupplierByName @SupplierName = 'Tech Corp';
+GO
 
 -- Funkcja
 CREATE FUNCTION dbo.GetEmployeesPosition (@Position NVARCHAR(100))
@@ -335,6 +359,8 @@ RETURN (
     FROM Employees
     WHERE [Position] = @Position
 );
+GO
+
 -- Egzekucja funkcji
 SELECT * FROM dbo.GetEmployeesPosition('Manager');
 
